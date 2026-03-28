@@ -2,10 +2,29 @@
   "name": "@uri-ga/db",
   "version": "0.1.0",
   "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "prisma"
+  ],
   "scripts": {
-    "build": "echo 'No build for db package yet'",
-    "lint": "echo 'No lint for db package yet'",
-    "test": "echo 'No tests for db package yet'"
+    "build": "tsc -p tsconfig.json",
+    "lint": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "prisma:generate": "prisma generate --schema ./prisma/schema.prisma",
+    "prisma:migrate:dev": "prisma migrate dev --schema ./prisma/schema.prisma",
+    "prisma:migrate:deploy": "prisma migrate deploy --schema ./prisma/schema.prisma",
+    "prisma:seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.14",
+    "prisma": "^6.5.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.8"
   }
 }
-

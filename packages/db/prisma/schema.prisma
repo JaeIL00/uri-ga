@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  HEAD
+  MEMBER
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+}
+
+model Family {
+  id            String        @id @default(uuid())
+  name          String
+  inviteCode    String        @unique
+  monthlyBudget Int           @default(0)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  users         User[]
+  transactions  Transaction[]
+  aiReports     AiReport[]
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  name         String
+  role         Role          @default(MEMBER)
+  familyId     String?
+  family       Family?       @relation(fields: [familyId], references: [id], onDelete: SetNull)
+  transactions Transaction[]
+  auditLogs    AuditLog[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([familyId])
+}
+
+model Transaction {
+  id            String          @id @default(uuid())
+  familyId      String
+  family        Family          @relation(fields: [familyId], references: [id], onDelete: Restrict)
+  userId        String
+  user          User            @relation(fields: [userId], references: [id], onDelete: Restrict)
+  type          TransactionType @default(EXPENSE)
+  amount        Int
+  category      String
+  description   String?
+  transactionAt DateTime        @default(now())
+  deletedAt     DateTime?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  auditLogs     AuditLog[]
+
+  @@index([familyId, transactionAt])
+  @@index([familyId, deletedAt])
+  @@index([userId])
+}
+
+model AiReport {
+  id           String   @id @default(uuid())
+  familyId     String
+  family       Family   @relation(fields: [familyId], references: [id], onDelete: Restrict)
+  reportPeriod String
+  summary      String
+  analysisJson Json
+  feedback     String
+  createdAt    DateTime @default(now())
+
+  @@unique([familyId, reportPeriod])
+}
+
+model AuditLog {
+  id            String      @id @default(uuid())
+  transactionId String
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Restrict)
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Restrict)
+  action        AuditAction
+  oldData       Json?
+  newData       Json?
+  createdAt     DateTime    @default(now())
+
+  @@index([transactionId, createdAt])
+  @@index([userId])
+}
