@@ -38,7 +38,7 @@ function useChartReady() {
 
 function ChartFallback() {
   return (
-    <div className="flex h-full min-h-[18rem] items-center justify-center rounded-[1.2rem] bg-[color:var(--panel-muted)] text-sm text-[color:var(--ink-soft)]">
+    <div className="flex h-full min-h-[18rem] items-center justify-center rounded-2xl bg-[color:var(--surface-container)] text-sm text-[color:var(--on-surface-soft)]">
       차트 데이터를 정리하고 있어요.
     </div>
   );
@@ -83,8 +83,10 @@ export function ExpenseDonut({
                 formatter={(value) => formatCurrency(Number(value ?? 0))}
                 contentStyle={{
                   borderRadius: 16,
-                  border: "1px solid rgba(15, 23, 42, 0.08)",
-                  background: "rgba(255, 252, 246, 0.97)",
+                  outline: "1px solid rgba(194, 198, 212, 0.15)",
+                  border: "none",
+                  background: "rgba(255, 255, 255, 0.9)",
+                  backdropFilter: "blur(24px)",
                 }}
               />
             </PieChart>
@@ -93,10 +95,10 @@ export function ExpenseDonut({
           <ChartFallback />
         )}
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-          <div className="text-xs uppercase tracking-[0.24em] text-[color:var(--ink-soft)]">
+          <div className="text-xs uppercase tracking-[0.24em] text-[color:var(--on-surface-soft)]">
             Total Expense
           </div>
-          <div className="mt-2 text-center text-2xl font-semibold text-[color:var(--ink-strong)]">
+          <div className="mt-2 text-center text-2xl font-semibold text-[color:var(--on-surface)]">
             {new Intl.NumberFormat("ko-KR", {
               style: "currency",
               currency: "KRW",
@@ -107,15 +109,15 @@ export function ExpenseDonut({
       </div>
       <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
         {data.slice(0, 4).map((entry) => (
-          <div key={entry.category} className="rounded-[1rem] bg-[color:var(--panel-muted)] p-3">
+          <div key={entry.category} className="rounded-2xl bg-[color:var(--surface-container)] p-3">
             <div className="flex items-center gap-2">
               <span
                 className="h-2.5 w-2.5 rounded-full"
                 style={{ backgroundColor: entry.fill }}
               />
-              <span className="text-[color:var(--ink-soft)]">{entry.category}</span>
+              <span className="text-[color:var(--on-surface-soft)]">{entry.category}</span>
             </div>
-            <div className="mt-2 font-semibold text-[color:var(--ink-strong)]">
+            <div className="mt-2 font-semibold text-[color:var(--on-surface)]">
               {Math.round(entry.share)}%
             </div>
           </div>
@@ -143,13 +145,13 @@ export function SpendingTrend({
           <p className="panel-eyebrow">Deep Dive</p>
           <h3 className="panel-title">수입·지출 추이</h3>
         </div>
-        <p className="text-sm text-[color:var(--ink-soft)]">드래그로 범위를 좁혀 상세 흐름을 볼 수 있어요</p>
+        <p className="text-sm text-[color:var(--on-surface-soft)]">드래그로 범위를 좁혀 상세 흐름을 볼 수 있어요</p>
       </div>
       <div className="h-[18rem]">
         {ready ? (
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={data} margin={{ left: 4, right: 12, top: 8, bottom: 8 }}>
-              <CartesianGrid stroke="rgba(148, 163, 184, 0.16)" vertical={false} />
+              <CartesianGrid stroke="rgba(194, 198, 212, 0.25)" vertical={false} />
               <XAxis dataKey="label" tickLine={false} axisLine={false} />
               <YAxis
                 tickFormatter={(value) => `${Math.round(Number(value) / 10000)}만`}
@@ -160,14 +162,16 @@ export function SpendingTrend({
                 formatter={(value) => formatCurrency(Number(value ?? 0))}
                 contentStyle={{
                   borderRadius: 16,
-                  border: "1px solid rgba(15, 23, 42, 0.08)",
-                  background: "rgba(255, 252, 246, 0.97)",
+                  outline: "1px solid rgba(194, 198, 212, 0.15)",
+                  border: "none",
+                  background: "rgba(255, 255, 255, 0.9)",
+                  backdropFilter: "blur(24px)",
                 }}
               />
               <Line
                 type="monotone"
                 dataKey="previous"
-                stroke="rgba(100, 116, 139, 0.65)"
+                stroke="rgba(122, 128, 145, 0.7)"
                 strokeDasharray="5 5"
                 strokeWidth={2}
                 dot={false}
@@ -175,15 +179,15 @@ export function SpendingTrend({
               <Line
                 type="monotone"
                 dataKey="current"
-                stroke="var(--accent-strong)"
+                stroke="var(--primary)"
                 strokeWidth={3}
                 activeDot={{ r: 6 }}
               />
               <Brush
                 dataKey="label"
                 height={26}
-                stroke="var(--accent-strong)"
-                fill="rgba(15, 118, 110, 0.1)"
+                stroke="var(--primary)"
+                fill="rgba(94, 146, 243, 0.14)"
                 travellerWidth={12}
                 startIndex={range[0]}
                 endIndex={range[1]}
@@ -221,7 +225,7 @@ export function CategoryComparison({ data }: { data: CategoryDatum[] }) {
         {ready ? (
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} margin={{ left: 0, right: 12, top: 8, bottom: 8 }}>
-              <CartesianGrid stroke="rgba(148, 163, 184, 0.14)" vertical={false} />
+              <CartesianGrid stroke="rgba(194, 198, 212, 0.23)" vertical={false} />
               <XAxis dataKey="category" tickLine={false} axisLine={false} />
               <YAxis hide />
               <Tooltip
@@ -233,8 +237,10 @@ export function CategoryComparison({ data }: { data: CategoryDatum[] }) {
                 ]}
                 contentStyle={{
                   borderRadius: 16,
-                  border: "1px solid rgba(15, 23, 42, 0.08)",
-                  background: "rgba(255, 252, 246, 0.97)",
+                  outline: "1px solid rgba(194, 198, 212, 0.15)",
+                  border: "none",
+                  background: "rgba(255, 255, 255, 0.9)",
+                  backdropFilter: "blur(24px)",
                 }}
               />
               <Bar dataKey="amount" radius={[12, 12, 6, 6]}>

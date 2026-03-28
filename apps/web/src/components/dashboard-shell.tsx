@@ -97,165 +97,173 @@ export function DashboardShell({ initialMode = "month" }: DashboardShellProps) {
   }`;
 
   return (
-    <main className="min-h-screen bg-[color:var(--bg-canvas)] text-[color:var(--ink-strong)]">
-      <div className="aurora" aria-hidden="true" />
-      <div className="relative mx-auto flex w-full max-w-[92rem] flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-        <section className="hero-shell">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-3xl">
-              <p className="eyebrow">Uri-Ga household console</p>
-              <h1 className="mt-3 text-4xl font-semibold tracking-[-0.04em] sm:text-5xl">
-                {viewModel.familyName}의 돈 흐름을 한 화면에서 투명하게 봅니다.
-              </h1>
-              <p className="mt-4 max-w-2xl text-base leading-7 text-[color:var(--ink-soft)] sm:text-lg">
-                {viewModel.displayName}님, 필요한 지출은 존중하고 다음 선택은 더 가볍게 만들 수 있도록
-                이번 {mode === "month" ? "달" : "주"}의 리듬을 정리했어요.
-              </p>
-            </div>
+    <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--on-surface)]">
+      <div className="page-atmosphere" aria-hidden="true" />
 
-            <div className="flex flex-col items-start gap-3">
-              <PeriodToggle value={mode} onChange={setMode} />
-              <div className="rounded-full border border-[color:var(--line-soft)] bg-[color:var(--panel-strong)] px-4 py-2 text-sm text-[color:var(--ink-soft)]">
-                <span className="font-semibold text-[color:var(--ink-strong)]">가족 코드</span>{" "}
-                {viewModel.inviteCode}
-                <span className="mx-2 text-[color:var(--line-strong)]">/</span>
-                <span
-                  className={
-                    status === "live"
-                      ? "text-[color:var(--success)]"
-                      : "text-[color:var(--accent-strong)]"
-                  }
-                >
-                  {status === "live" ? "실시간 연결" : status === "loading" ? "연결 중" : "로컬 샘플"}
-                </span>
+      <div className="shell-wrap mx-auto flex w-full max-w-[96rem] flex-col gap-9 px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
+        <section className="hero-shell rise-in">
+          <div className="grid items-start gap-8 xl:grid-cols-[1.35fr_0.85fr]">
+            <div className="xl:pr-8">
+              <p className="eyebrow">The Digital Sanctuary</p>
+              <h1 className="hero-title mt-4">{viewModel.familyName}의 흐름을 숨김 없이, 부드럽게.</h1>
+              <p className="hero-copy mt-6">
+                {viewModel.displayName}님, 이번 {mode === "month" ? "달" : "주"}은 숫자를 밀어붙이기보다
+                리듬을 다듬는 방식으로 가보세요. 차분한 간격이 쌓이면 큰 목표가 더 빨리 가까워져요.
+              </p>
+
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <PeriodToggle value={mode} onChange={setMode} />
+                <div className="floating-pill px-5 py-3 text-sm text-[color:var(--on-surface-soft)]">
+                  집중 구간 <span className="ml-2 font-semibold text-[color:var(--on-surface)]">{selectedWindowLabel}</span>
+                </div>
               </div>
             </div>
+
+            <aside className="glass-float p-6 xl:translate-y-10">
+              <p className="eyebrow">Family Channel</p>
+              <h2 className="mt-4 text-3xl font-bold tracking-[-0.02em] text-[color:var(--on-surface)]">
+                {viewModel.inviteCode}
+              </h2>
+              <p className="mt-3 text-sm leading-7 text-[color:var(--on-surface-soft)]">
+                데이터는 모두 가족 채널 단위로 동기화됩니다. 감추는 모드 없이 동일한 화면을 공유합니다.
+              </p>
+
+              <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
+                <div className="section-tone-mid">
+                  <p className="text-xs uppercase tracking-[0.15em] text-[color:var(--on-surface-soft)]">총 지출</p>
+                  <p className="mt-2 text-xl font-semibold tracking-[-0.02em]">{formatCurrency(viewModel.totalExpense)}</p>
+                </div>
+                <div className="section-tone-mid">
+                  <p className="text-xs uppercase tracking-[0.15em] text-[color:var(--on-surface-soft)]">연결 상태</p>
+                  <p className="mt-2 text-xl font-semibold tracking-[-0.02em] text-[color:var(--primary)]">
+                    {status === "live" ? "실시간 연결" : status === "loading" ? "연결 중" : "로컬 샘플"}
+                  </p>
+                </div>
+              </div>
+
+              <button type="button" className="pill-cta mt-7 w-full px-5 py-3 font-semibold">
+                이번 리듬 유지하기
+              </button>
+            </aside>
           </div>
         </section>
 
-        <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="핵심 지표">
-          {viewModel.kpis.map((kpi) => (
-            <article key={kpi.label} className={`metric-card metric-${kpi.tone}`}>
-              <p className="text-sm text-[color:var(--ink-soft)]">{kpi.label}</p>
-              <div className="mt-3 text-3xl font-semibold tracking-[-0.04em]">{kpi.value}</div>
-              <p className="mt-3 text-sm text-[color:var(--ink-soft)]">{kpi.hint}</p>
+        <section className="grid gap-4 xl:grid-cols-12 rise-in delay-1" aria-label="핵심 지표">
+          {viewModel.kpis.map((kpi, index) => (
+            <article
+              key={kpi.label}
+              className={`metric-card metric-${kpi.tone} ${
+                index === 0 ? "xl:col-span-6" : "xl:col-span-2"
+              }`}
+            >
+              <p className="text-sm text-[color:var(--on-surface-soft)]">{kpi.label}</p>
+              <div className="mt-3 text-3xl font-bold tracking-[-0.02em]">{kpi.value}</div>
+              <p className="mt-4 text-sm leading-6 text-[color:var(--on-surface-soft)]">{kpi.hint}</p>
             </article>
           ))}
         </section>
 
         {errorMessage ? (
-          <div className="rounded-[1.25rem] border border-[color:var(--line-soft)] bg-[color:var(--panel-strong)] px-4 py-3 text-sm text-[color:var(--ink-soft)]">
+          <div className="glass-float rise-in delay-2 px-5 py-4 text-sm leading-7 text-[color:var(--on-surface-soft)]">
             API 응답을 기다리는 동안 샘플 데이터를 보여주고 있습니다. {errorMessage}
           </div>
         ) : null}
 
-        <section className="grid gap-4 xl:grid-cols-[1.1fr_1.3fr]" aria-label="차트 영역">
-          <ExpenseDonut data={viewModel.categories} totalExpense={viewModel.totalExpense} />
-          <div className="flex flex-col gap-3">
-            <div className="rounded-full border border-[color:var(--line-soft)] bg-[color:var(--panel-strong)] px-4 py-2 text-sm text-[color:var(--ink-soft)]">
-              상세 구간: <span className="font-semibold text-[color:var(--ink-strong)]">{selectedWindowLabel}</span>
-            </div>
+        <section className="grid gap-5 xl:grid-cols-[0.92fr_1.08fr] rise-in delay-2" aria-label="차트 영역">
+          <div className="section-tone-low">
+            <ExpenseDonut data={viewModel.categories} totalExpense={viewModel.totalExpense} />
+          </div>
+
+          <div className="section-tone-low">
             <SpendingTrend data={viewModel.trend} range={range} onRangeChange={setRange} />
           </div>
         </section>
 
-        <section className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]" aria-label="비교와 고정비">
-          <CategoryComparison data={viewModel.categories} />
+        <section className="grid gap-5 xl:grid-cols-[1.15fr_0.85fr] rise-in delay-3" aria-label="비교와 고정비">
+          <div className="section-tone-low">
+            <CategoryComparison data={viewModel.categories} />
+          </div>
 
+          <div className="section-tone-low">
+            <div className="panel-card">
+              <div className="panel-heading">
+                <div>
+                  <p className="panel-eyebrow">Baseline Overlay</p>
+                  <h3 className="panel-title">고정비 현황</h3>
+                </div>
+              </div>
+
+              <div className="grid gap-3">
+                {viewModel.fixedCosts.map((cost) => (
+                  <article key={cost.category} className="section-tone-mid">
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <div className="text-sm text-[color:var(--on-surface-soft)]">{cost.category}</div>
+                        <div className="mt-1 text-xl font-semibold tracking-[-0.02em]">{formatCurrency(cost.amount)}</div>
+                      </div>
+                      <div className="rounded-full bg-[rgba(94,146,243,0.16)] px-3 py-1 text-xs font-semibold text-[color:var(--primary)]">
+                        {cost.trend === "down" ? "전월보다 안정" : cost.trend === "up" ? "전월보다 증가" : "전월과 유사"}
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+
+              <p className="mt-5 text-sm leading-7 text-[color:var(--on-surface-soft)]">{viewModel.feedback}</p>
+            </div>
+          </div>
+        </section>
+
+        <div className="rise-in delay-3">
+          <MonthlyReport viewModel={viewModel} />
+        </div>
+
+        <section className="section-tone-low rise-in delay-4" aria-label="최근 내역">
           <div className="panel-card">
             <div className="panel-heading">
               <div>
-                <p className="panel-eyebrow">Baseline Overlay</p>
-                <h3 className="panel-title">고정비 현황</h3>
+                <p className="panel-eyebrow">Transparent Ledger</p>
+                <h3 className="panel-title">실시간 공동 내역</h3>
               </div>
+              <p className="max-w-[20rem] text-sm leading-7 text-[color:var(--on-surface-soft)]">
+                삭제된 내역은 목록에서 숨기되, 감사 로그에서 변경 이력을 계속 추적합니다.
+              </p>
             </div>
+
             <div className="grid gap-3">
-              {viewModel.fixedCosts.map((cost) => (
+              {viewModel.transactionItems.map((transaction) => (
                 <article
-                  key={cost.category}
-                  className="rounded-[1.2rem] border border-[color:var(--line-soft)] bg-[color:var(--panel-muted)] p-4"
+                  key={transaction.id}
+                  className="grid gap-3 rounded-2xl bg-[color:var(--surface-container)] p-4 sm:grid-cols-[1.25fr_0.75fr_auto]"
                 >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-sm text-[color:var(--ink-soft)]">{cost.category}</div>
-                      <div className="mt-1 text-xl font-semibold">{formatCurrency(cost.amount)}</div>
+                  <div>
+                    <div className="text-sm text-[color:var(--on-surface-soft)]">{transaction.category}</div>
+                    <div className="mt-1 text-lg font-semibold text-[color:var(--on-surface)]">
+                      {transaction.description ?? "메모 없음"}
                     </div>
-                    <div
-                      className="rounded-full px-3 py-1 text-xs font-semibold"
-                      style={{
-                        backgroundColor:
-                          cost.trend === "down"
-                            ? "rgba(15, 118, 110, 0.14)"
-                            : cost.trend === "up"
-                              ? "rgba(220, 38, 38, 0.12)"
-                              : "rgba(100, 116, 139, 0.12)",
-                        color:
-                          cost.trend === "down"
-                            ? "var(--success)"
-                            : cost.trend === "up"
-                              ? "var(--danger)"
-                              : "var(--ink-soft)",
-                      }}
-                    >
-                      {cost.trend === "down"
-                        ? "전월보다 안정"
-                        : cost.trend === "up"
-                          ? "전월보다 증가"
-                          : "전월과 유사"}
-                    </div>
+                  </div>
+
+                  <div className="text-sm text-[color:var(--on-surface-soft)]">
+                    {new Intl.DateTimeFormat("ko-KR", {
+                      month: "long",
+                      day: "numeric",
+                      weekday: "short",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }).format(new Date(transaction.transactionAt))}
+                  </div>
+
+                  <div
+                    className={`text-right text-lg font-semibold ${
+                      transaction.tone === "income" ? "text-[color:var(--primary)]" : "text-[color:var(--on-surface)]"
+                    }`}
+                  >
+                    {transaction.tone === "income" ? "+" : "-"}
+                    {formatCurrency(transaction.amount)}
                   </div>
                 </article>
               ))}
             </div>
-            <p className="mt-4 text-sm leading-6 text-[color:var(--ink-soft)]">{viewModel.feedback}</p>
-          </div>
-        </section>
-
-        <MonthlyReport viewModel={viewModel} />
-
-        <section className="panel-card" aria-label="최근 내역">
-          <div className="panel-heading">
-            <div>
-              <p className="panel-eyebrow">Transparent Ledger</p>
-              <h3 className="panel-title">실시간 공동 내역</h3>
-            </div>
-            <p className="text-sm text-[color:var(--ink-soft)]">
-              삭제된 내역은 숨겨지지만 감사 로그에서 계속 추적됩니다.
-            </p>
-          </div>
-          <div className="grid gap-3">
-            {viewModel.transactionItems.map((transaction) => (
-              <article
-                key={transaction.id}
-                className="grid gap-3 rounded-[1.2rem] border border-[color:var(--line-soft)] bg-[color:var(--panel-muted)] p-4 sm:grid-cols-[1.2fr_0.8fr_auto]"
-              >
-                <div>
-                  <div className="text-sm text-[color:var(--ink-soft)]">{transaction.category}</div>
-                  <div className="mt-1 text-lg font-semibold text-[color:var(--ink-strong)]">
-                    {transaction.description ?? "메모 없음"}
-                  </div>
-                </div>
-                <div className="text-sm text-[color:var(--ink-soft)]">
-                  {new Intl.DateTimeFormat("ko-KR", {
-                    month: "long",
-                    day: "numeric",
-                    weekday: "short",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }).format(new Date(transaction.transactionAt))}
-                </div>
-                <div
-                  className={`text-right text-lg font-semibold ${
-                    transaction.tone === "income"
-                      ? "text-[color:var(--success)]"
-                      : "text-[color:var(--ink-strong)]"
-                  }`}
-                >
-                  {transaction.tone === "income" ? "+" : "-"}
-                  {formatCurrency(transaction.amount)}
-                </div>
-              </article>
-            ))}
           </div>
         </section>
       </div>

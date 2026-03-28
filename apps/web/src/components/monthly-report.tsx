@@ -9,8 +9,8 @@ export function MonthlyReport({ viewModel }: MonthlyReportProps) {
   const periodLabel = viewModel.mode === "month" ? "이달" : "이번 주";
 
   return (
-    <section className="grid gap-4 lg:grid-cols-4" aria-label="월간 리포트">
-      <article className="report-card lg:col-span-2">
+    <section className="grid gap-5 lg:grid-cols-4" aria-label="월간 리포트">
+      <article className="report-card lg:col-span-2 lg:translate-y-2">
         <p className="report-index">0. {periodLabel} 요약</p>
         <h2 className="report-title">{viewModel.summary}</h2>
         <p className="report-copy">
@@ -19,7 +19,7 @@ export function MonthlyReport({ viewModel }: MonthlyReportProps) {
         </p>
       </article>
 
-      <article className="report-card">
+      <article className="report-card lg:translate-y-8">
         <p className="report-index">1. 주요 소비 흐름</p>
         <h3 className="report-title">
           {strongestCategory?.category ?? "식비"}가 가장 또렷하게 보였어요
@@ -39,14 +39,14 @@ export function MonthlyReport({ viewModel }: MonthlyReportProps) {
         <p className="report-copy">{viewModel.collaboration.compliment}</p>
       </article>
 
-      <article className="report-card lg:col-span-2">
+      <article className="report-card lg:col-span-2 lg:-translate-y-1">
         <p className="report-index">3. 다정한 예측 가이드</p>
         <h3 className="report-title">{viewModel.forecast.targetName} 준비 흐름</h3>
         <p className="report-copy">{viewModel.forecast.message}</p>
-        <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-          <div className="rounded-[1rem] bg-[color:var(--panel-muted)] p-3">
-            <div className="text-[color:var(--ink-soft)]">목표 금액</div>
-            <div className="mt-1 font-semibold text-[color:var(--ink-strong)]">
+        <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
+          <div className="rounded-2xl bg-[color:var(--surface-container)] p-3">
+            <div className="text-[color:var(--on-surface-soft)]">목표 금액</div>
+            <div className="mt-1 font-semibold text-[color:var(--on-surface)]">
               {new Intl.NumberFormat("ko-KR", {
                 style: "currency",
                 currency: "KRW",
@@ -54,9 +54,9 @@ export function MonthlyReport({ viewModel }: MonthlyReportProps) {
               }).format(viewModel.forecast.targetAmount)}
             </div>
           </div>
-          <div className="rounded-[1rem] bg-[color:var(--panel-muted)] p-3">
-            <div className="text-[color:var(--ink-soft)]">현재 예측</div>
-            <div className="mt-1 font-semibold text-[color:var(--accent-strong)]">
+          <div className="rounded-2xl bg-[color:var(--surface-container)] p-3">
+            <div className="text-[color:var(--on-surface-soft)]">현재 예측</div>
+            <div className="mt-1 font-semibold text-[color:var(--primary)]">
               {new Intl.NumberFormat("ko-KR", {
                 style: "currency",
                 currency: "KRW",
