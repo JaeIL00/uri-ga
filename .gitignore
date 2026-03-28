@@ -1,0 +1,21 @@
+node_modules
+.pnpm-store
+.DS_Store
+
+# build outputs
+dist
+coverage
+.next
+out
+
+# env files
+.env
+.env.local
+.env.*.local
+
+# logs
+*.log
+
+# prisma
+packages/db/generated
+

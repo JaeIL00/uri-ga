@@ -1,0 +1,11 @@
+{
+  "name": "@uri-ga/db",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "echo 'No build for db package yet'",
+    "lint": "echo 'No lint for db package yet'",
+    "test": "echo 'No tests for db package yet'"
+  }
+}
+

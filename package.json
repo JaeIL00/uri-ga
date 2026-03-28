@@ -1,0 +1,16 @@
+{
+  "name": "uri-ga",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.6.2",
+  "scripts": {
+    "dev": "pnpm --parallel --filter @uri-ga/api --filter @uri-ga/web dev",
+    "dev:api": "pnpm --filter @uri-ga/api dev",
+    "dev:web": "pnpm --filter @uri-ga/web dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "test:e2e": "pnpm --filter @uri-ga/api test:e2e"
+  }
+}
+
