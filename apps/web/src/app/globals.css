@@ -1,26 +1,163 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-canvas: #f7f1e8;
+  --bg-layer: #fffaf2;
+  --panel-strong: rgba(255, 250, 242, 0.84);
+  --panel-muted: rgba(255, 244, 227, 0.82);
+  --line-soft: rgba(112, 72, 33, 0.12);
+  --line-strong: rgba(112, 72, 33, 0.26);
+  --ink-strong: #1c170f;
+  --ink-soft: #76624f;
+  --accent-strong: #0f766e;
+  --accent-soft: rgba(15, 118, 110, 0.14);
+  --success: #0f766e;
+  --danger: #b45309;
+  --shadow-panel: 0 22px 70px rgba(62, 39, 14, 0.08);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--bg-canvas);
+  --color-foreground: var(--ink-strong);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-heading);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background:
+    radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 22rem),
+    radial-gradient(circle at bottom right, rgba(244, 183, 64, 0.15), transparent 28rem),
+    var(--bg-canvas);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 250, 242, 0.3), rgba(247, 241, 232, 0.96)),
+    var(--bg-canvas);
+  color: var(--ink-strong);
+  font-family: var(--font-body), sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
+
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 16% 18%, rgba(15, 118, 110, 0.12), transparent 22rem),
+    radial-gradient(circle at 84% 12%, rgba(249, 115, 22, 0.12), transparent 20rem),
+    radial-gradient(circle at 70% 78%, rgba(244, 183, 64, 0.16), transparent 24rem);
+  pointer-events: none;
+}
+
+.hero-shell,
+.panel-card,
+.report-card,
+.metric-card {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  background: var(--panel-strong);
+  box-shadow: var(--shadow-panel);
+  backdrop-filter: blur(18px);
+}
+
+.hero-shell {
+  border-radius: 2rem;
+  padding: 1.5rem;
+}
+
+.panel-card,
+.report-card,
+.metric-card {
+  border-radius: 1.6rem;
+  padding: 1.25rem;
+}
+
+.metric-card {
+  min-height: 11rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0)),
+    var(--panel-strong);
+}
+
+.metric-positive {
+  background:
+    linear-gradient(160deg, rgba(15, 118, 110, 0.12), transparent 60%),
+    var(--panel-strong);
+}
+
+.metric-alert {
+  background:
+    linear-gradient(160deg, rgba(180, 83, 9, 0.12), transparent 60%),
+    var(--panel-strong);
+}
+
+.eyebrow,
+.panel-eyebrow,
+.report-index {
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.panel-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.panel-title,
+.report-title {
+  margin-top: 0.35rem;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.45rem;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+}
+
+.report-copy {
+  margin-top: 0.75rem;
+  color: var(--ink-soft);
+  line-height: 1.8;
+}
+
+.report-badge {
+  display: inline-flex;
+  margin-top: 0.9rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  padding: 0.5rem 0.9rem;
+  color: var(--accent-strong);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+@media (min-width: 640px) {
+  .hero-shell {
+    padding: 2rem;
+  }
+
+  .panel-card,
+  .report-card,
+  .metric-card {
+    padding: 1.5rem;
+  }
 }
